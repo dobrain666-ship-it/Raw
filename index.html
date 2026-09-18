@@ -1,472 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --primary:#7c5cff;--primary2:#a78bfa;--cyan:#22d3ee;--pink:#f472b6;
-  --green:#34d399;--red:#f87171;--amber:#fbbf24;
-  --text:#f5f5fa;--dim:#8b8ba7;--dim2:#565678;
-  --line:rgba(124,92,255,.18);--glass:rgba(20,20,35,.55);
-}
-html,body{height:100%}
-body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overflow:hidden;min-height:100vh;display:flex;justify-content:center;user-select:none;-webkit-user-select:none}
-#bg{position:fixed;inset:0;z-index:-5;background:
-  radial-gradient(ellipse at 15% 0%,rgba(124,92,255,.22),transparent 45%),
-  radial-gradient(ellipse at 85% 15%,rgba(34,211,238,.15),transparent 45%),
-  radial-gradient(ellipse at 50% 100%,rgba(244,114,182,.15),transparent 50%),#06060c}
-#grid{position:fixed;inset:0;z-index:-4;pointer-events:none;
-  background-image:linear-gradient(rgba(124,92,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,.05) 1px,transparent 1px);
-  background-size:36px 36px;
-  mask-image:radial-gradient(ellipse at 50% 40%,#000 25%,transparent 75%);
-  -webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 25%,transparent 75%)}
-#vig{position:fixed;inset:0;z-index:-3;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,transparent 35%,rgba(0,0,0,.6) 100%)}
-#orbs{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(70px)}
-.orb.o1{width:44vmax;height:44vmax;left:-15vmax;top:-15vmax;background:radial-gradient(circle,rgba(124,92,255,.35),transparent 60%);animation:fl1 20s ease-in-out infinite alternate}
-.orb.o2{width:38vmax;height:38vmax;right:-14vmax;top:10vmax;background:radial-gradient(circle,rgba(34,211,238,.28),transparent 60%);animation:fl2 24s ease-in-out infinite alternate}
-.orb.o3{width:34vmax;height:34vmax;left:6vmax;bottom:-20vmax;background:radial-gradient(circle,rgba(244,114,182,.28),transparent 60%);animation:fl3 28s ease-in-out infinite alternate}
-@keyframes fl1{to{transform:translate(12vmax,8vmax) scale(1.2)}}
-@keyframes fl2{to{transform:translate(-10vmax,10vmax) scale(.9)}}
-@keyframes fl3{to{transform:translate(-8vmax,-8vmax) scale(1.25)}}
-::-webkit-scrollbar{width:0}
-.screen{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#06060c;padding:24px;transition:opacity .5s,visibility .5s;opacity:0;visibility:hidden;pointer-events:none;overflow-y:auto}
-.screen.on{opacity:1;visibility:visible;pointer-events:auto}
-.sp-ring{width:60px;height:60px;border-radius:50%;border:2px solid rgba(124,92,255,.2);border-top-color:#a78bfa;border-right-color:#22d3ee;animation:spSpin .9s linear infinite;box-shadow:0 0 30px rgba(124,92,255,.5);margin-bottom:20px}
-@keyframes spSpin{to{transform:rotate(360deg)}}
-.sp-logo{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:7px;background:linear-gradient(90deg,#a78bfa,#22d3ee,#f472b6,#a78bfa);background-size:300% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite;margin-bottom:10px}
-@keyframes shine{to{background-position:300% center}}
-.sp-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--dim)}
-.card-ui{width:100%;max-width:400px;padding:34px 24px 28px;border-radius:22px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);text-align:center;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);margin:auto}
-.card-ui::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--primary2),var(--cyan),transparent)}
-.brand-logo{font-family:'Cinzel',serif;font-weight:900;font-size:19px;letter-spacing:6px;background:linear-gradient(90deg,#fff,#a78bfa 40%,#22d3ee 70%,#fff);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 5s linear infinite;margin-bottom:6px}
-.brand-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:4px;color:var(--dim);margin-bottom:24px}
-.icon-box{width:60px;height:60px;margin:0 auto 18px;border-radius:16px;background:linear-gradient(135deg,rgba(124,92,255,.25),rgba(244,114,182,.15));border:1px solid rgba(124,92,255,.4);display:flex;align-items:center;justify-content:center}
-.icon-box svg{width:26px;height:26px;stroke:var(--primary2);fill:none;stroke-width:1.8;filter:drop-shadow(0 0 8px rgba(167,139,250,.7))}
-.title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--text);font-weight:800;margin-bottom:6px;text-transform:uppercase}
-.desc{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:var(--dim);margin-bottom:20px}
-.input-wrap{position:relative;margin-bottom:14px}
-.inp{width:100%;padding:15px 16px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(124,92,255,.35);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:2px;text-align:center;outline:none;transition:.25s}
-.inp::placeholder{color:var(--dim2);letter-spacing:1px;font-weight:500}
-.inp:focus{border-color:var(--primary2);box-shadow:0 0 0 3px rgba(124,92,255,.15),0 0 24px rgba(124,92,255,.35);background:rgba(0,0,0,.5)}
-.inp.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(248,113,113,.15),0 0 24px rgba(248,113,113,.35);animation:shake .4s}
-.inp.ok{border-color:var(--green);box-shadow:0 0 0 3px rgba(52,211,153,.15),0 0 24px rgba(52,211,153,.4)}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
-.btn{width:100%;padding:15px;border-radius:14px;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--primary),#a855f7 45%,#ec4899);box-shadow:0 10px 34px rgba(124,92,255,.4),inset 0 1px 0 rgba(255,255,255,.25);transition:.25s;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.6;cursor:not-allowed}
-.btn::after{content:'';position:absolute;top:0;left:-120%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);animation:shim 3s infinite}
-@keyframes shim{55%,100%{transform:translateX(280%) skewX(-20deg)}}
-.msg{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;min-height:14px;font-weight:700}
-.msg.err{color:var(--red)}
-.msg.ok{color:var(--green)}
-.msg.info{color:var(--dim)}
-.back-btn{margin-top:14px;width:100%;padding:12px;border-radius:12px;background:transparent;border:1px solid rgba(124,92,255,.4);color:var(--primary2);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;text-transform:uppercase;transition:.25s}
-.back-btn:hover{background:rgba(124,92,255,.1);border-color:var(--primary2)}
-.mt-icon{width:72px;height:72px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,rgba(124,92,255,.25),rgba(34,211,238,.15));border:1px solid rgba(124,92,255,.4);display:flex;align-items:center;justify-content:center;position:relative}
-.mt-icon::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px dashed rgba(167,139,250,.4);animation:spSpin 6s linear infinite}
-.mt-icon svg{width:34px;height:34px;stroke:var(--primary2);fill:none;stroke-width:1.8;filter:drop-shadow(0 0 8px rgba(167,139,250,.7))}
-.mt-bar{width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;position:relative;margin-bottom:14px}
-.mt-bar-fill{height:100%;width:30%;border-radius:2px;background:linear-gradient(90deg,var(--primary),var(--cyan));box-shadow:0 0 12px rgba(34,211,238,.6);transition:width .4s;position:relative;overflow:hidden}
-.mt-bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-100%);animation:shim 1.6s infinite}
-.search-box{width:100%;max-width:400px;display:flex;flex-direction:column;gap:14px}
-.result-area{width:100%;max-width:400px;margin-top:20px;display:flex;flex-direction:column;align-items:center}
-.result-card{width:100%;background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:22px 20px;display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(16px);animation:slideUp .5s ease}
-@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.row{display:flex;flex-direction:column;gap:4px}
-.row .label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;opacity:.9;font-weight:700}
-.row .value{font-size:14px;color:#fff;word-break:break-word;line-height:1.5}
-.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(124,92,255,.3),transparent)}
-.error-card{width:100%;background:var(--glass);border:1px solid rgba(248,113,113,.4);border-radius:18px;padding:36px 24px;text-align:center;animation:slideUp .5s ease}
-.err-title{font-family:'Cinzel',serif;font-size:20px;letter-spacing:5px;font-weight:700;color:var(--red);margin-bottom:8px}
-.err-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:2px}
-.loader{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);display:none;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.loader.on{display:flex}
-.loader-ring{width:60px;height:60px;border-radius:50%;border:2px solid transparent;border-top-color:#22d3ee;border-right-color:#b14dff;animation:spSpin .9s linear infinite}
-.loader-text{margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;color:var(--cyan);text-transform:uppercase;animation:pulse 1.4s ease infinite}
-@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
+body{background:#0a0a15;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{width:100%;max-width:400px;background:#15152a;border:1px solid #2a2a4a;border-radius:16px;padding:30px 24px}
+.logo{text-align:center;font-size:18px;letter-spacing:4px;margin-bottom:6px;color:#a78bfa}
+.tag{text-align:center;font-size:10px;letter-spacing:3px;color:#666;margin-bottom:24px}
+input{width:100%;padding:14px;background:#0a0a15;border:1px solid #2a2a4a;border-radius:10px;color:#fff;font-size:16px;text-align:center;outline:none;margin-bottom:12px}
+input:focus{border-color:#7c5cff}
+button{width:100%;padding:14px;background:linear-gradient(135deg,#7c5cff,#ec4899);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+button:disabled{opacity:.5}
+.msg{text-align:center;font-size:12px;margin-top:14px;color:#888;min-height:18px}
+.msg.err{color:#f87171}
+.msg.ok{color:#34d399}
+.result{background:#0a0a15;border:1px solid #2a2a4a;border-radius:10px;padding:16px;margin-top:16px}
+.result .row{padding:8px 0;border-bottom:1px solid #1a1a2e;font-size:13px}
+.result .row:last-child{border:none}
+.result .k{color:#22d3ee;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.result .v{color:#fff;margin-top:4px;word-break:break-word}
+.hide{display:none}
 </style>
 </head>
 <body>
+<div class="box">
+  <div class="logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
+  <div class="tag" id="tag">ACCESS CONTROL</div>
 
-<div id="bg"></div>
-<div id="grid"></div>
-<div id="vig"></div>
-<div id="orbs"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
-
-<!-- SPLASH -->
-<div class="screen on" id="s-splash">
-  <div class="sp-ring"></div>
-  <div class="sp-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-  <div class="sp-sub">INITIALIZING</div>
-</div>
-
-<!-- MAINTENANCE -->
-<div class="screen" id="s-maint">
-  <div class="card-ui">
-    <div class="mt-icon">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-      </svg>
-    </div>
-    <div class="brand-logo" style="font-size:14px;letter-spacing:4px">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag">SYSTEM STATUS</div>
-    <div class="mt-bar"><div class="mt-bar-fill" id="mtBar"></div></div>
-    <div class="msg info" id="mtMsg">VERIFYING...</div>
-    <button class="back-btn" id="mtRetry" style="display:none;margin-top:20px" onclick="bootCheck()">RETRY</button>
+  <!-- LOGIN -->
+  <div id="pg-login">
+    <input type="password" id="loginKey" placeholder="Enter key" autocomplete="off"/>
+    <button onclick="login()">UNLOCK</button>
+    <div class="msg" id="loginMsg">Waiting...</div>
   </div>
-</div>
 
-<!-- LOGIN -->
-<div class="screen" id="s-login">
-  <div class="card-ui">
-    <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag">◈ ACCESS CONTROL ◈</div>
-    <div class="icon-box">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2"/>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-        <circle cx="12" cy="16" r="1.5"/>
-      </svg>
-    </div>
-    <div class="title">ENTER ACCESS KEY</div>
-    <div class="desc">VERIFY TO CONTINUE</div>
-    <div class="input-wrap">
-      <input type="password" class="inp" id="loginKey" placeholder="••••••••" autocomplete="off" spellcheck="false"/>
-    </div>
-    <button class="btn" id="loginBtn">UNLOCK</button>
-    <div class="msg info" id="loginMsg">Waiting for key...</div>
+  <!-- SEARCH -->
+  <div id="pg-search" class="hide">
+    <input type="tel" id="numInput" placeholder="03xxxxxxxx" maxlength="11"/>
+    <button onclick="search()">GET DATA</button>
+    <div class="msg" id="searchMsg"></div>
+    <div id="resultArea"></div>
+    <button onclick="logout()" style="background:#2a2a4a;margin-top:12px">BACK</button>
   </div>
-</div>
 
-<!-- API TOKEN SCREEN -->
-<div class="screen" id="s-api">
-  <div class="card-ui">
-    <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag">◈ API CONFIGURATION ◈</div>
-    <div class="icon-box">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-      </svg>
-    </div>
-    <div class="title">API TOKEN</div>
-    <div class="desc">UPDATE SEARCH AUTHORIZATION TOKEN</div>
-    <div class="input-wrap">
-      <input type="text" class="inp" id="apiToken" placeholder="Bearer token" autocomplete="off" spellcheck="false"/>
-    </div>
-    <button class="btn" id="apiSave">SAVE TOKEN</button>
-    <button class="back-btn" onclick="logout()">← BACK TO LOGIN</button>
-    <div class="msg info" id="apiMsg"></div>
+  <!-- API TOKEN -->
+  <div id="pg-api" class="hide">
+    <input type="text" id="apiToken" placeholder="Enter token"/>
+    <button onclick="saveToken('api')">SAVE TOKEN</button>
+    <div class="msg" id="apiMsg"></div>
+    <button onclick="logout()" style="background:#2a2a4a;margin-top:12px">BACK</button>
   </div>
-</div>
 
-<!-- TOKEN SCREEN -->
-<div class="screen" id="s-token">
-  <div class="card-ui">
-    <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag">◈ TOKEN MANAGEMENT ◈</div>
-    <div class="icon-box">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2"/>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
-    </div>
-    <div class="title">CURRENT TOKEN</div>
-    <div class="desc">VIEW OR UPDATE SEARCH TOKEN</div>
-    <div class="input-wrap">
-      <input type="text" class="inp" id="tokInput" placeholder="token value" autocomplete="off" spellcheck="false"/>
-    </div>
-    <button class="btn" id="tokSave">SAVE TOKEN</button>
-    <button class="back-btn" onclick="logout()">← BACK TO LOGIN</button>
-    <div class="msg info" id="tokMsg"></div>
+  <!-- TOKEN -->
+  <div id="pg-token" class="hide">
+    <input type="text" id="tokInput" placeholder="Enter token"/>
+    <button onclick="saveToken('tok')">SAVE TOKEN</button>
+    <div class="msg" id="tokMsg"></div>
+    <button onclick="logout()" style="background:#2a2a4a;margin-top:12px">BACK</button>
   </div>
-</div>
 
-<!-- SEARCH -->
-<div class="screen" id="s-search" style="justify-content:flex-start;padding-top:60px">
-  <div style="width:100%;max-width:400px;padding-bottom:20px;text-align:center">
-    <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag" style="margin-bottom:0">◈ SIGNAL ENGINE ◈</div>
-  </div>
-  <div class="search-box">
-    <div class="input-wrap">
-      <input type="tel" class="inp" id="numInput" placeholder="03xxxxxxxx" inputmode="numeric" maxlength="11" autocomplete="off"/>
+  <!-- MAINTENANCE -->
+  <div id="pg-maint" class="hide">
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:40px">🛠</div>
+      <div style="margin-top:14px;font-size:14px;letter-spacing:2px;color:#fbbf24">MAINTENANCE</div>
+      <div style="margin-top:8px;font-size:12px;color:#888">Site under maintenance</div>
     </div>
-    <button class="btn" id="getBtn">GET DATA</button>
+    <button onclick="bootCheck()">RETRY</button>
   </div>
-  <div class="result-area" id="resultArea"></div>
-</div>
-
-<div class="loader" id="loader">
-  <div class="loader-ring"></div>
-  <div class="loader-text">SEARCHING</div>
 </div>
 
 <script>
 const $ = id => document.getElementById(id);
+const LS = 'nm_cfg';
 
-/* ---------- SCREEN NAV ---------- */
+function cfg(){ try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}} }
+function save(c){ localStorage.setItem(LS, JSON.stringify(c)) }
+
 function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
-  const el = $(id);
-  if(el) el.classList.add('on');
+  ['pg-login','pg-search','pg-api','pg-token','pg-maint'].forEach(p=>{
+    $(p).classList.toggle('hide', p !== id);
+  });
 }
 
-/* ---------- VERIFY ---------- */
-async function verifyKey(key){
+async function verify(key){
   try{
-    const r = await fetch('/?key=' + encodeURIComponent(key), { cache:'no-store' });
-    if(!r.ok) return null;
+    const r = await fetch('/?key=' + encodeURIComponent(key));
     return await r.json();
-  }catch(e){ return null; }
+  }catch(e){ return null }
 }
 
-async function getMaintenance(){
+async function maintCheck(){
   try{
-    const r = await fetch('/maintenance-status', { cache:'no-store' });
-    if(!r.ok) return false;
+    const r = await fetch('/maintenance-status');
     const d = await r.json();
     return !!d.active;
-  }catch(e){ return false; }
+  }catch(e){ return false }
 }
 
-/* ---------- BOOT CHECK ---------- */
 async function bootCheck(){
-  $('mtRetry').style.display = 'none';
-  $('mtBar').style.width = '40%';
-  $('mtMsg').className = 'msg info';
-  $('mtMsg').textContent = 'CHECKING SYSTEM...';
-  show('s-maint');
-
-  const maintOn = await getMaintenance();
-  $('mtBar').style.width = '100%';
-
-  if(maintOn){
-    $('mtMsg').className = 'msg err';
-    $('mtMsg').textContent = '✕ SITE UNDER MAINTENANCE';
-    $('mtRetry').style.display = 'inline-block';
-    return;
-  }
-
-  $('mtMsg').className = 'msg ok';
-  $('mtMsg').textContent = '✓ SYSTEM READY';
-  setTimeout(()=>show('s-login'), 500);
+  show('pg-maint');
+  const on = await maintCheck();
+  if(on){ return }   // maintenance screen pe hi raho
+  show('pg-login');
+  $('loginMsg').textContent = 'Waiting...';
 }
 
-/* ---------- LOGIN ---------- */
 async function login(){
-  const inp = $('loginKey');
-  const btn = $('loginBtn');
+  const k = $('loginKey').value.trim();
   const msg = $('loginMsg');
-  const key = inp.value.trim();
-
-  if(!key){
-    inp.classList.add('err');
-    msg.className = 'msg err';
-    msg.textContent = '✕ Please enter a key';
-    setTimeout(()=>inp.classList.remove('err'), 500);
+  if(!k){ msg.textContent='Enter key'; msg.className='msg err'; return }
+  msg.textContent='Verifying...'; msg.className='msg';
+  const d = await verify(k);
+  if(!d || d.status !== 'verified'){
+    msg.textContent='Wrong key'; msg.className='msg err';
     return;
   }
-
-  inp.classList.remove('err','ok');
-  btn.disabled = true;
-  const oldHTML = btn.innerHTML;
-  btn.innerHTML = 'VERIFYING...';
-  msg.className = 'msg info';
-  msg.textContent = 'Contacting server...';
-
-  const data = await verifyKey(key);
-
-  if(!data || data.status !== 'verified'){
-    inp.classList.add('err');
-    msg.className = 'msg err';
-    msg.textContent = '✕ Invalid Key · Access Denied';
-    setTimeout(()=>inp.classList.remove('err'), 600);
-    btn.disabled = false;
-    btn.innerHTML = oldHTML;
-    return;
-  }
-
-  inp.classList.add('ok');
-  msg.className = 'msg ok';
-  msg.textContent = '✓ Access Granted · ' + (data.name || key);
-
-  const nameLower = String(data.name || '').toLowerCase();
-
-  setTimeout(async ()=>{
-    inp.value = '';
-
-    if(nameLower === 'api'){
-      // Load current token
-      const m = await getMaintenance();
-      $('apiToken').value = '';
-      $('apiMsg').textContent = 'Enter new search token';
-      $('apiMsg').className = 'msg info';
-      show('s-api');
-    }
-    else if(nameLower === 'token'){
-      $('tokInput').value = '';
-      $('tokMsg').textContent = 'Enter new token value';
-      $('tokMsg').className = 'msg info';
-      show('s-token');
-    }
-    else {
-      $('numInput').value = '';
-      $('resultArea').innerHTML = '';
-      show('s-search');
-      setTimeout(()=>$('numInput').focus(), 400);
-    }
-    btn.disabled = false;
-    btn.innerHTML = oldHTML;
+  msg.textContent='✓ Welcome ' + (d.name || k); msg.className='msg ok';
+  const n = String(d.name || '').toLowerCase();
+  setTimeout(()=>{
+    $('loginKey').value = '';
+    if(n === 'api'){ show('pg-api'); $('apiToken').value='' }
+    else if(n === 'token'){ show('pg-token'); $('tokInput').value=cfg().token||'' }
+    else{ show('pg-search'); $('numInput').value=''; $('resultArea').innerHTML='' }
   }, 500);
 }
 
-$('loginBtn').addEventListener('click', login);
-$('loginKey').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
-
-/* ---------- API SCREEN ---------- */
-$('apiSave').addEventListener('click', async ()=>{
-  const val = $('apiToken').value.trim();
-  const msg = $('apiMsg');
-  if(!val){ msg.className='msg err'; msg.textContent='✕ token empty'; return; }
-  msg.className = 'msg info';
-  msg.textContent = 'Saving...';
-  try{
-    const r = await fetch('/admin/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Admin-Token': val,   // ← yahan admin token hi daalna hoga
-      },
-      body: JSON.stringify({ token: val })
-    });
-    const d = await r.json();
-    if(d.success){
-      msg.className='msg ok';
-      msg.textContent='✓ Token updated globally';
-    } else {
-      msg.className='msg err';
-      msg.textContent='✕ ' + (d.error || 'failed');
-    }
-  }catch(e){
-    msg.className='msg err';
-    msg.textContent='✕ Error';
-  }
-});
-
-/* ---------- TOKEN SCREEN ---------- */
-$('tokSave').addEventListener('click', async ()=>{
-  const val = $('tokInput').value.trim();
-  const msg = $('tokMsg');
-  if(!val){ msg.className='msg err'; msg.textContent='✕ token empty'; return; }
-  msg.className='msg info';
-  msg.textContent='Saving...';
+async function saveToken(type){
+  const id = type === 'api' ? 'apiToken' : 'tokInput';
+  const mid = type === 'api' ? 'apiMsg' : 'tokMsg';
+  const v = $(id).value.trim();
+  const msg = $(mid);
+  if(!v){ msg.textContent='Empty'; msg.className='msg err'; return }
+  msg.textContent='Saving...'; msg.className='msg';
   try{
     const r = await fetch('/admin/token', {
       method:'POST',
-      headers:{ 'Content-Type':'application/json', 'X-Admin-Token': val },
-      body: JSON.stringify({ token: val })
+      headers:{'Content-Type':'application/json','X-Admin-Token':v},
+      body: JSON.stringify({token:v})
     });
     const d = await r.json();
     if(d.success){
-      msg.className='msg ok';
-      msg.textContent='✓ Token updated globally';
+      const c = cfg(); c.token = v; save(c);
+      msg.textContent='✓ Saved'; msg.className='msg ok';
     } else {
-      msg.className='msg err';
-      msg.textContent='✕ ' + (d.error || 'failed');
+      msg.textContent='✕ ' + (d.error||'failed'); msg.className='msg err';
     }
   }catch(e){
-    msg.className='msg err';
-    msg.textContent='✕ Error';
+    msg.textContent='✕ Error'; msg.className='msg err';
   }
-});
-
-/* ---------- LOGOUT ---------- */
-function logout(){
-  $('loginKey').value = '';
-  $('loginMsg').className = 'msg info';
-  $('loginMsg').textContent = 'Waiting for key...';
-  show('s-login');
 }
 
-/* ---------- SEARCH ---------- */
-$('numInput').addEventListener('input', e=>{
-  e.target.value = e.target.value.replace(/\D/g,'').slice(0,11);
-});
-$('numInput').addEventListener('keydown', e=>{ if(e.key === 'Enter') doSearch(); });
-$('getBtn').addEventListener('click', doSearch);
-
-async function doSearch(){
+async function search(){
   const num = $('numInput').value.trim();
+  const msg = $('searchMsg');
   const area = $('resultArea');
-  if(num.length < 10){
-    $('numInput').classList.add('err');
-    setTimeout(()=>$('numInput').classList.remove('err'), 500);
-    return;
-  }
-  $('loader').classList.add('on');
-  $('getBtn').disabled = true;
+  if(num.length < 10){ msg.textContent='Invalid number'; msg.className='msg err'; return }
+  msg.textContent='Searching...'; msg.className='msg';
   area.innerHTML = '';
-
   try{
-    const res = await fetch('/proxy-search?query=' + encodeURIComponent(num), {
-      method:'GET',
-      cache:'no-store'
-    });
-    const data = await res.json().catch(()=>null);
-
-    await new Promise(r=>setTimeout(r, 400));
-    $('loader').classList.remove('on');
-    $('getBtn').disabled = false;
-
-    if(!data || data.success === false || !data.data || !data.data[0]){
-      showError(area, 'DATA NOT FOUND');
+    const r = await fetch('/proxy-search?query=' + encodeURIComponent(num));
+    const d = await r.json();
+    if(!d || d.success === false || !d.data || !d.data[0]){
+      msg.textContent='✕ Data not found'; msg.className='msg err';
       return;
     }
-    showResult(area, data.data[0]);
+    msg.textContent='✓ Found'; msg.className='msg ok';
+    const it = d.data[0];
+    const rows = [
+      ['Name', it.name || 'N/A'],
+      ['Mobile', it.mobile || 'N/A'],
+      ['CNIC', it.cnic || 'N/A'],
+      ['Address', it.address || 'N/A'],
+      ['Num2Name', it.Num2Name || 'N/A']
+    ];
+    let h = '<div class="result">';
+    rows.forEach(([k,v])=>{
+      h += `<div class="row"><div class="k">${k}</div><div class="v">${esc(v)}</div></div>`;
+    });
+    h += '</div>';
+    area.innerHTML = h;
   }catch(e){
-    await new Promise(r=>setTimeout(r, 300));
-    $('loader').classList.remove('on');
-    $('getBtn').disabled = false;
-    showError(area, 'DATA NOT FOUND');
+    msg.textContent='✕ Error'; msg.className='msg err';
   }
 }
 
-function showResult(area, item){
-  const rows = [
-    { label:'Name',    value: item.name    || 'N/A' },
-    { label:'Mobile',  value: item.mobile  || 'N/A' },
-    { label:'CNIC',    value: item.cnic    || 'N/A' },
-    { label:'Address', value: item.address || 'N/A' },
-    { label:'Num2Name',value: (item.Num2Name===null||item.Num2Name===undefined||item.Num2Name==='') ? 'N/A' : item.Num2Name }
-  ];
-  let h = '<div class="result-card">';
-  rows.forEach((r,i)=>{
-    h += `<div class="row"><div class="label">${r.label}</div><div class="value">${esc(String(r.value))}</div></div>`;
-    if(i < rows.length-1) h += '<div class="divider"></div>';
-  });
-  h += '</div>';
-  area.innerHTML = h;
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
+
+function logout(){
+  $('loginKey').value = '';
+  $('loginMsg').textContent = 'Waiting...';
+  $('loginMsg').className = 'msg';
+  show('pg-login');
 }
 
-function showError(area, msg){
-  area.innerHTML = `<div class="error-card"><div class="err-title">${msg}</div><div class="err-sub">NO RECORD AVAILABLE</div></div>`;
-}
+$('loginKey').addEventListener('keydown', e => { if(e.key==='Enter') login() });
+$('numInput').addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,11) });
+$('numInput').addEventListener('keydown', e => { if(e.key==='Enter') search() });
 
-function esc(s){
-  return String(s).replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
-}
-
-window.addEventListener('load', ()=>{
-  setTimeout(bootCheck, 1500);
-});
+window.addEventListener('load', ()=> setTimeout(bootCheck, 500));
 </script>
 </body>
 </html>
