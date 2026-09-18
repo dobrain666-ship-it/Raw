@@ -1,9 +1,6 @@
+// deno.json
 {
   "tasks": {
     "start": "deno run --allow-net --allow-read --allow-env --unstable-kv main.ts"
-  },
-  "imports": {},
-  "fmt": {
-    "lineWidth": 100
   }
 }
