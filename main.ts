@@ -16,7 +16,7 @@ const KEYS: Record<string, string> = {
   "MAVIA":       "MAVIA",
   "api":         "hsmdz_2026_secure_9xAk!kL",   // api key → name = API token
   "token":       "hsmdz_2026_secure_9xAk!kL",   // token key → name = token value
-  "maintenance": "active",                       // maintenance → name = "active"
+  "maintenance": "deactive",                       // maintenance → name = "active"
 };
 
 const corsHeaders = {
