@@ -1,416 +1,62 @@
 // ═══════════════════════════════════════════════════════
-//  ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ — Deno Deploy Ready
+//  CORS Bypass Proxy
+//  Usage: https://your-deno.deno.net/?query=03001234567
 // ═══════════════════════════════════════════════════════
 
-const ADMIN_TOKEN = "NAIRON_ADMIN_SECRET_2026_X9K7";
-const DEFAULT_SEARCH_TOKEN = "hsmdz_2026_secure_9xAk!kL";
+const SEARCH_API = "https://db-service-pk.vercel.app/api/search";
+const DEFAULT_TOKEN = "hsmdz_2026_secure_9xAk!kL";
 
-const kv = await Deno.openKv();
-
-// ─── Default keys ───
-const DEFAULT_KEYS: Record<string, string> = {
-  "Main":        "Main",
-  "NAIRON":      "NAIRON",
-  "MAVIA":       "MAVIA",
-  "api":         "api",
-  "token":       "token",
-  "maintenance": "off",
-};
-
-// ─── Bootstrap KV ───
-async function bootstrap() {
-  const init = await kv.get(["meta", "initialised"]);
-  if (!init.value) {
-    for (const [k, v] of Object.entries(DEFAULT_KEYS)) {
-      await kv.set(["keys", k], v);
-    }
-    await kv.set(["meta", "maintenance"], false);
-    await kv.set(["meta", "search_token"], DEFAULT_SEARCH_TOKEN);
-    await kv.set(["meta", "initialised"], true);
-    console.log("[BOOTSTRAP] loaded");
-  }
-}
-await bootstrap();
-
-// ─── CORS ───
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Auth-Token, X-Admin-Token",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Auth-Token",
 };
 
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { ...CORS, "Content-Type": "application/json" },
-  });
-}
-
-function isAdmin(req: Request): boolean {
-  return req.headers.get("X-Admin-Token") === ADMIN_TOKEN;
-}
-
-// ═══════════════════════════════════════════════════════
-//  INLINE HTML
-// ═══════════════════════════════════════════════════════
-const HTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<title>ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--primary:#7c5cff;--primary2:#a78bfa;--cyan:#22d3ee;--pink:#f472b6;--green:#34d399;--red:#f87171;--text:#f5f5fa;--dim:#8b8ba7;--dim2:#565678;--line:rgba(124,92,255,.18);--glass:rgba(20,20,35,.55)}
-html,body{height:100%}
-body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overflow:hidden;min-height:100vh;display:flex;justify-content:center;user-select:none;-webkit-user-select:none}
-#bg{position:fixed;inset:0;z-index:-5;background:radial-gradient(ellipse at 15% 0%,rgba(124,92,255,.22),transparent 45%),radial-gradient(ellipse at 85% 15%,rgba(34,211,238,.15),transparent 45%),radial-gradient(ellipse at 50% 100%,rgba(244,114,182,.15),transparent 50%),#06060c}
-#grid{position:fixed;inset:0;z-index:-4;pointer-events:none;background-image:linear-gradient(rgba(124,92,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,.05) 1px,transparent 1px);background-size:36px 36px}
-#orbs{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(70px)}
-.orb.o1{width:44vmax;height:44vmax;left:-15vmax;top:-15vmax;background:radial-gradient(circle,rgba(124,92,255,.35),transparent 60%);animation:fl1 20s ease-in-out infinite alternate}
-.orb.o2{width:38vmax;height:38vmax;right:-14vmax;top:10vmax;background:radial-gradient(circle,rgba(34,211,238,.28),transparent 60%);animation:fl2 24s ease-in-out infinite alternate}
-.orb.o3{width:34vmax;height:34vmax;left:6vmax;bottom:-20vmax;background:radial-gradient(circle,rgba(244,114,182,.28),transparent 60%);animation:fl3 28s ease-in-out infinite alternate}
-@keyframes fl1{to{transform:translate(12vmax,8vmax) scale(1.2)}}
-@keyframes fl2{to{transform:translate(-10vmax,10vmax) scale(.9)}}
-@keyframes fl3{to{transform:translate(-8vmax,-8vmax) scale(1.25)}}
-::-webkit-scrollbar{width:0}
-.screen{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#06060c;padding:24px;transition:opacity .5s,visibility .5s;opacity:0;visibility:hidden;pointer-events:none;overflow-y:auto}
-.screen.on{opacity:1;visibility:visible;pointer-events:auto}
-.sp-ring{width:60px;height:60px;border-radius:50%;border:2px solid rgba(124,92,255,.2);border-top-color:#a78bfa;border-right-color:#22d3ee;animation:spSpin .9s linear infinite;box-shadow:0 0 30px rgba(124,92,255,.5);margin-bottom:20px}
-@keyframes spSpin{to{transform:rotate(360deg)}}
-.sp-logo{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:7px;background:linear-gradient(90deg,#a78bfa,#22d3ee,#f472b6,#a78bfa);background-size:300% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite;margin-bottom:10px}
-@keyframes shine{to{background-position:300% center}}
-.sp-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--dim)}
-.card-ui{width:100%;max-width:400px;padding:34px 24px 28px;border-radius:22px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);text-align:center;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);margin:auto}
-.card-ui::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--primary2),var(--cyan),transparent)}
-.brand-logo{font-family:'Cinzel',serif;font-weight:900;font-size:19px;letter-spacing:6px;background:linear-gradient(90deg,#fff,#a78bfa 40%,#22d3ee 70%,#fff);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 5s linear infinite;margin-bottom:6px}
-.brand-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:4px;color:var(--dim);margin-bottom:24px}
-.icon-box{width:60px;height:60px;margin:0 auto 18px;border-radius:16px;background:linear-gradient(135deg,rgba(124,92,255,.25),rgba(244,114,182,.15));border:1px solid rgba(124,92,255,.4);display:flex;align-items:center;justify-content:center}
-.icon-box svg{width:26px;height:26px;stroke:var(--primary2);fill:none;stroke-width:1.8}
-.title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--text);font-weight:800;margin-bottom:6px;text-transform:uppercase}
-.desc{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:var(--dim);margin-bottom:20px}
-.input-wrap{position:relative;margin-bottom:14px}
-.inp{width:100%;padding:15px 16px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(124,92,255,.35);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:2px;text-align:center;outline:none;transition:.25s}
-.inp::placeholder{color:var(--dim2);letter-spacing:1px;font-weight:500}
-.inp:focus{border-color:var(--primary2);box-shadow:0 0 0 3px rgba(124,92,255,.15),0 0 24px rgba(124,92,255,.35);background:rgba(0,0,0,.5)}
-.inp.err{border-color:var(--red);animation:shake .4s}
-.inp.ok{border-color:var(--green)}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
-.btn{width:100%;padding:15px;border-radius:14px;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--primary),#a855f7 45%,#ec4899);box-shadow:0 10px 34px rgba(124,92,255,.4);transition:.25s;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.6;cursor:not-allowed}
-.msg{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;min-height:14px;font-weight:700}
-.msg.err{color:var(--red)}
-.msg.ok{color:var(--green)}
-.msg.info{color:var(--dim)}
-.back-btn{margin-top:14px;width:100%;padding:12px;border-radius:12px;background:transparent;border:1px solid rgba(124,92,255,.4);color:var(--primary2);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;text-transform:uppercase;transition:.25s}
-.back-btn:hover{background:rgba(124,92,255,.1)}
-.mt-icon{width:72px;height:72px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,rgba(124,92,255,.25),rgba(34,211,238,.15));border:1px solid rgba(124,92,255,.4);display:flex;align-items:center;justify-content:center;position:relative}
-.mt-icon svg{width:34px;height:34px;stroke:var(--primary2);fill:none;stroke-width:1.8}
-.search-box{width:100%;max-width:400px;display:flex;flex-direction:column;gap:14px}
-.result-area{width:100%;max-width:400px;margin-top:20px;display:flex;flex-direction:column;align-items:center}
-.result-card{width:100%;background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:22px 20px;display:flex;flex-direction:column;gap:14px;animation:slideUp .5s ease}
-@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.row{display:flex;flex-direction:column;gap:4px}
-.row .label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;font-weight:700}
-.row .value{font-size:14px;color:#fff;word-break:break-word;line-height:1.5}
-.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(124,92,255,.3),transparent)}
-.error-card{width:100%;background:var(--glass);border:1px solid rgba(248,113,113,.4);border-radius:18px;padding:36px 24px;text-align:center;animation:slideUp .5s ease}
-.err-title{font-family:'Cinzel',serif;font-size:20px;letter-spacing:5px;font-weight:700;color:var(--red);margin-bottom:8px}
-.err-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:2px}
-.loader{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);display:none;flex-direction:column;align-items:center;justify-content:center}
-.loader.on{display:flex}
-.loader-ring{width:60px;height:60px;border-radius:50%;border:2px solid transparent;border-top-color:#22d3ee;border-right-color:#b14dff;animation:spSpin .9s linear infinite}
-.loader-text{margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;color:var(--cyan);text-transform:uppercase}
-</style>
-</head>
-<body>
-<div id="bg"></div><div id="grid"></div>
-<div id="orbs"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
-
-<div class="screen on" id="s-splash">
-  <div class="sp-ring"></div>
-  <div class="sp-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-  <div class="sp-sub">INITIALIZING</div>
-</div>
-
-<div class="screen" id="s-maint">
-  <div class="card-ui">
-    <div class="mt-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
-    <div class="brand-logo" style="font-size:14px;letter-spacing:4px">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag">SYSTEM STATUS</div>
-    <div class="msg err" id="mtMsg">SITE UNDER MAINTENANCE</div>
-    <button class="back-btn" style="margin-top:20px" onclick="bootCheck()">RETRY</button>
-  </div>
-</div>
-
-<div class="screen" id="s-login">
-  <div class="card-ui">
-    <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag">◈ ACCESS CONTROL ◈</div>
-    <div class="icon-box"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1.5"/></svg></div>
-    <div class="title">ENTER ACCESS KEY</div>
-    <div class="desc">VERIFY TO CONTINUE</div>
-    <div class="input-wrap"><input type="password" class="inp" id="loginKey" placeholder="••••••••" autocomplete="off"/></div>
-    <button class="btn" id="loginBtn">UNLOCK</button>
-    <div class="msg info" id="loginMsg">Waiting for key...</div>
-  </div>
-</div>
-
-<div class="screen" id="s-api">
-  <div class="card-ui">
-    <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag">◈ API CONFIGURATION ◈</div>
-    <div class="icon-box"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-    <div class="title">API TOKEN</div>
-    <div class="desc">UPDATE SEARCH AUTHORIZATION TOKEN</div>
-    <div class="input-wrap"><input type="text" class="inp" id="apiToken" placeholder="Enter admin token" autocomplete="off"/></div>
-    <button class="btn" id="apiSave">SAVE TOKEN</button>
-    <button class="back-btn" onclick="logout()">← BACK TO LOGIN</button>
-    <div class="msg info" id="apiMsg"></div>
-  </div>
-</div>
-
-<div class="screen" id="s-token">
-  <div class="card-ui">
-    <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag">◈ TOKEN MANAGEMENT ◈</div>
-    <div class="icon-box"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-    <div class="title">CURRENT TOKEN</div>
-    <div class="desc">VIEW OR UPDATE SEARCH TOKEN</div>
-    <div class="input-wrap"><input type="text" class="inp" id="tokInput" placeholder="Enter token value" autocomplete="off"/></div>
-    <button class="btn" id="tokSave">SAVE TOKEN</button>
-    <button class="back-btn" onclick="logout()">← BACK TO LOGIN</button>
-    <div class="msg info" id="tokMsg"></div>
-  </div>
-</div>
-
-<div class="screen" id="s-search" style="justify-content:flex-start;padding-top:60px">
-  <div style="width:100%;max-width:400px;padding-bottom:20px;text-align:center">
-    <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
-    <div class="brand-tag" style="margin-bottom:0">◈ SIGNAL ENGINE ◈</div>
-  </div>
-  <div class="search-box">
-    <div class="input-wrap"><input type="tel" class="inp" id="numInput" placeholder="03xxxxxxxx" inputmode="numeric" maxlength="11" autocomplete="off"/></div>
-    <button class="btn" id="getBtn">GET DATA</button>
-  </div>
-  <div class="result-area" id="resultArea"></div>
-</div>
-
-<div class="loader" id="loader"><div class="loader-ring"></div><div class="loader-text">SEARCHING</div></div>
-
-<script>
-const $=id=>document.getElementById(id);
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');}
-
-async function verify(key){
-  try{const r=await fetch('/?key='+encodeURIComponent(key));return await r.json();}catch(e){return null;}
-}
-async function maintStatus(){
-  try{const r=await fetch('/maintenance-status');const d=await r.json();return !!d.active;}catch(e){return false;}
-}
-
-async function bootCheck(){
-  show('s-maint');
-  const on = await maintStatus();
-  if(on){ $('mtMsg').textContent='✕ SITE UNDER MAINTENANCE'; return; }
-  $('mtMsg').className='msg ok'; $('mtMsg').textContent='✓ SYSTEM READY';
-  setTimeout(()=>{ $('mtMsg').className='msg err'; $('mtMsg').textContent='SITE UNDER MAINTENANCE'; show('s-login'); }, 400);
-}
-
-async function login(){
-  const inp=$('loginKey'), btn=$('loginBtn'), msg=$('loginMsg');
-  const key=inp.value.trim();
-  if(!key){inp.classList.add('err');msg.className='msg err';msg.textContent='✕ Enter key';setTimeout(()=>inp.classList.remove('err'),500);return;}
-  inp.classList.remove('err','ok');btn.disabled=true;const old=btn.innerHTML;btn.innerHTML='VERIFYING...';
-  msg.className='msg info';msg.textContent='Contacting server...';
-  const data=await verify(key);
-  if(!data||data.status!=='verified'){
-    inp.classList.add('err');msg.className='msg err';msg.textContent='✕ Invalid Key';
-    setTimeout(()=>inp.classList.remove('err'),600);btn.disabled=false;btn.innerHTML=old;return;
-  }
-  inp.classList.add('ok');msg.className='msg ok';msg.textContent='✓ '+(data.name||key);
-  const n=String(data.name||'').toLowerCase();
-  setTimeout(()=>{
-    inp.value='';
-    if(n==='api'){ $('apiToken').value=''; $('apiMsg').textContent='Enter token + admin secret'; $('apiMsg').className='msg info'; show('s-api'); }
-    else if(n==='token'){ $('tokInput').value=''; $('tokMsg').textContent='Enter new token'; $('tokMsg').className='msg info'; show('s-token'); }
-    else{ $('numInput').value=''; $('resultArea').innerHTML=''; show('s-search'); setTimeout(()=>$('numInput').focus(),400); }
-    btn.disabled=false;btn.innerHTML=old;
-  },500);
-}
-$('loginBtn').addEventListener('click',login);
-$('loginKey').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
-
-$('apiSave').addEventListener('click',async()=>{
-  const val=$('apiToken').value.trim(), msg=$('apiMsg');
-  if(!val){msg.className='msg err';msg.textContent='✕ empty';return;}
-  msg.className='msg info';msg.textContent='Saving...';
-  try{
-    const r=await fetch('/admin/token',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Token':val},body:JSON.stringify({token:val})});
-    const d=await r.json();
-    if(d.success){msg.className='msg ok';msg.textContent='✓ Token updated globally';}
-    else{msg.className='msg err';msg.textContent='✕ '+(d.error||'failed');}
-  }catch(e){msg.className='msg err';msg.textContent='✕ Error';}
-});
-
-$('tokSave').addEventListener('click',async()=>{
-  const val=$('tokInput').value.trim(), msg=$('tokMsg');
-  if(!val){msg.className='msg err';msg.textContent='✕ empty';return;}
-  msg.className='msg info';msg.textContent='Saving...';
-  try{
-    const r=await fetch('/admin/token',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Token':val},body:JSON.stringify({token:val})});
-    const d=await r.json();
-    if(d.success){msg.className='msg ok';msg.textContent='✓ Token updated globally';}
-    else{msg.className='msg err';msg.textContent='✕ '+(d.error||'failed');}
-  }catch(e){msg.className='msg err';msg.textContent='✕ Error';}
-});
-
-function logout(){ $('loginKey').value=''; $('loginMsg').className='msg info'; $('loginMsg').textContent='Waiting for key...'; show('s-login'); }
-
-$('numInput').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\\D/g,'').slice(0,11);});
-$('numInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
-$('getBtn').addEventListener('click',doSearch);
-
-async function doSearch(){
-  const num=$('numInput').value.trim(), area=$('resultArea');
-  if(num.length<10){$('numInput').classList.add('err');setTimeout(()=>$('numInput').classList.remove('err'),500);return;}
-  $('loader').classList.add('on');$('getBtn').disabled=true;area.innerHTML='';
-  try{
-    const res=await fetch('/proxy-search?query='+encodeURIComponent(num));
-    const data=await res.json().catch(()=>null);
-    await new Promise(r=>setTimeout(r,400));
-    $('loader').classList.remove('on');$('getBtn').disabled=false;
-    if(!data||data.success===false||!data.data||!data.data[0]){showError(area,'DATA NOT FOUND');return;}
-    showResult(area,data.data[0]);
-  }catch(e){
-    await new Promise(r=>setTimeout(r,300));
-    $('loader').classList.remove('on');$('getBtn').disabled=false;
-    showError(area,'DATA NOT FOUND');
-  }
-}
-
-function showResult(area,item){
-  const rows=[
-    {label:'Name',value:item.name||'N/A'},
-    {label:'Mobile',value:item.mobile||'N/A'},
-    {label:'CNIC',value:item.cnic||'N/A'},
-    {label:'Address',value:item.address||'N/A'},
-    {label:'Num2Name',value:(item.Num2Name===null||item.Num2Name===undefined||item.Num2Name==='')?'N/A':item.Num2Name}
-  ];
-  let h='<div class="result-card">';
-  rows.forEach((r,i)=>{h+='<div class="row"><div class="label">'+r.label+'</div><div class="value">'+esc(String(r.value))+'</div></div>';if(i<rows.length-1)h+='<div class="divider"></div>';});
-  h+='</div>';area.innerHTML=h;
-}
-function showError(area,msg){area.innerHTML='<div class="error-card"><div class="err-title">'+msg+'</div><div class="err-sub">NO RECORD AVAILABLE</div></div>';}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-
-window.addEventListener('load',()=>setTimeout(bootCheck,1500));
-</script>
-</body>
-</html>`;
-
-// ═══════════════════════════════════════════════════════
-//  SERVER
-// ═══════════════════════════════════════════════════════
 Deno.serve(async (req) => {
   const url = new URL(req.url);
-  const path = url.pathname;
 
-  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
-
-  // ─── ADMIN: ADD KEY ───
-  if (path === "/admin/add-key" && req.method === "POST") {
-    if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
-    try {
-      const { key, name } = await req.json();
-      if (!key || !name) return json({ error: "key and name required" }, 400);
-      await kv.set(["keys", key], name);
-      return json({ success: true, key, name });
-    } catch (e) { return json({ error: String(e) }, 500); }
+  // Preflight
+  if (req.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: CORS });
   }
 
-  // ─── ADMIN: DEL KEY ───
-  if (path === "/admin/del-key" && req.method === "POST") {
-    if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
-    try {
-      const { key } = await req.json();
-      if (!key) return json({ error: "key required" }, 400);
-      await kv.delete(["keys", key]);
-      return json({ success: true, key });
-    } catch (e) { return json({ error: String(e) }, 500); }
+  // Query param
+  const query = url.searchParams.get("query") || "";
+
+  if (!query) {
+    return new Response(
+      JSON.stringify({ success: false, error: "query missing" }),
+      { status: 400, headers: { ...CORS, "Content-Type": "application/json" } }
+    );
   }
 
-  // ─── ADMIN: MAINTENANCE ───
-  if (path === "/admin/maintenance" && req.method === "POST") {
-    if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
-    try {
-      const { active } = await req.json();
-      await kv.set(["meta", "maintenance"], !!active);
-      return json({ success: true, maintenance: !!active });
-    } catch (e) { return json({ error: String(e) }, 500); }
-  }
+  // Token: header → default
+  const token = req.headers.get("X-Auth-Token") || DEFAULT_TOKEN;
 
-  // ─── ADMIN: TOKEN ───
-  if (path === "/admin/token" && req.method === "POST") {
-    if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
-    try {
-      const { token } = await req.json();
-      if (!token) return json({ error: "token required" }, 400);
-      await kv.set(["meta", "search_token"], token);
-      return json({ success: true, token });
-    } catch (e) { return json({ error: String(e) }, 500); }
-  }
+  try {
+    const upstream = await fetch(
+      `${SEARCH_API}?query=${encodeURIComponent(query)}`,
+      {
+        headers: {
+          "Authorization": "Bearer " + token,
+          "Accept": "application/json",
+          "User-Agent": "Mozilla/5.0",
+        },
+      }
+    );
 
-  // ─── ADMIN: LIST ───
-  if (path === "/admin/list" && req.method === "GET") {
-    if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
-    const keys: Record<string, string> = {};
-    for await (const e of kv.list({ prefix: ["keys"] })) {
-      keys[e.key[1] as string] = e.value as string;
-    }
-    const m = await kv.get(["meta", "maintenance"]);
-    const t = await kv.get(["meta", "search_token"]);
-    return json({ success: true, keys, maintenance: !!m.value, search_token: t.value });
-  }
+    const body = await upstream.text();
 
-  // ─── PROXY SEARCH ───
-  if (path === "/proxy-search") {
-    const q = url.searchParams.get("query") || "";
-    if (!q) return json({ success: false, error: "query missing" }, 400);
-    let token = req.headers.get("X-Auth-Token") || "";
-    if (!token) {
-      const s = await kv.get(["meta", "search_token"]);
-      token = (s.value as string) || DEFAULT_SEARCH_TOKEN;
-    }
-    try {
-      const up = await fetch(
-        "https://db-service-pk.vercel.app/api/search?query=" + encodeURIComponent(q),
-        { headers: { "Authorization": "Bearer " + token, "Accept": "application/json", "User-Agent": "Mozilla/5.0" } }
-      );
-      const body = await up.text();
-      return new Response(body, { status: up.status, headers: { ...CORS, "Content-Type": "application/json" } });
-    } catch (e) { return json({ success: false, error: String(e) }, 500); }
+    return new Response(body, {
+      status: upstream.status,
+      headers: { ...CORS, "Content-Type": "application/json" },
+    });
+  } catch (e) {
+    return new Response(
+      JSON.stringify({ success: false, error: String(e) }),
+      { status: 500, headers: { ...CORS, "Content-Type": "application/json" } }
+    );
   }
-
-  // ─── MAINTENANCE STATUS ───
-  if (path === "/maintenance-status") {
-    const m = await kv.get(["meta", "maintenance"]);
-    return json({ active: !!m.value });
-  }
-
-  // ─── KEY VERIFY ───
-  const key = url.searchParams.get("key");
-  if (key !== null && key !== "") {
-    const s = await kv.get(["keys", key]);
-    if (!s.value) return json({ status: "not_verified" });
-    return json({ key, name: s.value as string, status: "verified" });
-  }
-
-  // ─── INDEX.HTML ───
-  return new Response(HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
 });
 
-console.log("→ ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ running");
+console.log("→ CORS proxy running");
