@@ -34,27 +34,21 @@ body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overfl
 @keyframes fl2{to{transform:translate(-10vmax,10vmax) scale(.9)}}
 @keyframes fl3{to{transform:translate(-8vmax,-8vmax) scale(1.25)}}
 ::-webkit-scrollbar{width:0}
-
 .screen{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#06060c;padding:24px;transition:opacity .5s,visibility .5s;opacity:0;visibility:hidden;pointer-events:none;overflow-y:auto}
 .screen.on{opacity:1;visibility:visible;pointer-events:auto}
-
 .sp-ring{width:60px;height:60px;border-radius:50%;border:2px solid rgba(124,92,255,.2);border-top-color:#a78bfa;border-right-color:#22d3ee;animation:spSpin .9s linear infinite;box-shadow:0 0 30px rgba(124,92,255,.5);margin-bottom:20px}
 @keyframes spSpin{to{transform:rotate(360deg)}}
 .sp-logo{font-family:'Cinzel',serif;font-weight:900;font-size:20px;letter-spacing:7px;background:linear-gradient(90deg,#a78bfa,#22d3ee,#f472b6,#a78bfa);background-size:300% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite;margin-bottom:10px}
 @keyframes shine{to{background-position:300% center}}
 .sp-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--dim)}
-
 .card-ui{width:100%;max-width:400px;padding:34px 24px 28px;border-radius:22px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);text-align:center;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);margin:auto}
 .card-ui::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--primary2),var(--cyan),transparent)}
-
 .brand-logo{font-family:'Cinzel',serif;font-weight:900;font-size:19px;letter-spacing:6px;background:linear-gradient(90deg,#fff,#a78bfa 40%,#22d3ee 70%,#fff);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 5s linear infinite;margin-bottom:6px}
 .brand-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:4px;color:var(--dim);margin-bottom:24px}
 .icon-box{width:60px;height:60px;margin:0 auto 18px;border-radius:16px;background:linear-gradient(135deg,rgba(124,92,255,.25),rgba(244,114,182,.15));border:1px solid rgba(124,92,255,.4);display:flex;align-items:center;justify-content:center}
 .icon-box svg{width:26px;height:26px;stroke:var(--primary2);fill:none;stroke-width:1.8;filter:drop-shadow(0 0 8px rgba(167,139,250,.7))}
-
 .title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--text);font-weight:800;margin-bottom:6px;text-transform:uppercase}
 .desc{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:var(--dim);margin-bottom:20px}
-
 .input-wrap{position:relative;margin-bottom:14px}
 .inp{width:100%;padding:15px 16px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(124,92,255,.35);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:2px;text-align:center;outline:none;transition:.25s}
 .inp::placeholder{color:var(--dim2);letter-spacing:1px;font-weight:500}
@@ -62,28 +56,23 @@ body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overfl
 .inp.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(248,113,113,.15),0 0 24px rgba(248,113,113,.35);animation:shake .4s}
 .inp.ok{border-color:var(--green);box-shadow:0 0 0 3px rgba(52,211,153,.15),0 0 24px rgba(52,211,153,.4)}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
-
 .btn{width:100%;padding:15px;border-radius:14px;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--primary),#a855f7 45%,#ec4899);box-shadow:0 10px 34px rgba(124,92,255,.4),inset 0 1px 0 rgba(255,255,255,.25);transition:.25s;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn:active{transform:scale(.98)}
 .btn:disabled{opacity:.6;cursor:not-allowed}
 .btn::after{content:'';position:absolute;top:0;left:-120%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);animation:shim 3s infinite}
 @keyframes shim{55%,100%{transform:translateX(280%) skewX(-20deg)}}
-
 .msg{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;min-height:14px;font-weight:700}
 .msg.err{color:var(--red)}
 .msg.ok{color:var(--green)}
 .msg.info{color:var(--dim)}
-
 .back-btn{margin-top:14px;width:100%;padding:12px;border-radius:12px;background:transparent;border:1px solid rgba(124,92,255,.4);color:var(--primary2);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;text-transform:uppercase;transition:.25s}
 .back-btn:hover{background:rgba(124,92,255,.1);border-color:var(--primary2)}
-
 .mt-icon{width:72px;height:72px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,rgba(124,92,255,.25),rgba(34,211,238,.15));border:1px solid rgba(124,92,255,.4);display:flex;align-items:center;justify-content:center;position:relative}
 .mt-icon::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px dashed rgba(167,139,250,.4);animation:spSpin 6s linear infinite}
 .mt-icon svg{width:34px;height:34px;stroke:var(--primary2);fill:none;stroke-width:1.8;filter:drop-shadow(0 0 8px rgba(167,139,250,.7))}
 .mt-bar{width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;position:relative;margin-bottom:14px}
 .mt-bar-fill{height:100%;width:30%;border-radius:2px;background:linear-gradient(90deg,var(--primary),var(--cyan));box-shadow:0 0 12px rgba(34,211,238,.6);transition:width .4s;position:relative;overflow:hidden}
 .mt-bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-100%);animation:shim 1.6s infinite}
-
 .search-box{width:100%;max-width:400px;display:flex;flex-direction:column;gap:14px}
 .result-area{width:100%;max-width:400px;margin-top:20px;display:flex;flex-direction:column;align-items:center}
 .result-card{width:100%;background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:22px 20px;display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(16px);animation:slideUp .5s ease}
@@ -95,7 +84,6 @@ body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overfl
 .error-card{width:100%;background:var(--glass);border:1px solid rgba(248,113,113,.4);border-radius:18px;padding:36px 24px;text-align:center;animation:slideUp .5s ease}
 .err-title{font-family:'Cinzel',serif;font-size:20px;letter-spacing:5px;font-weight:700;color:var(--red);margin-bottom:8px}
 .err-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:2px}
-
 .loader{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);display:none;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .loader.on{display:flex}
 .loader-ring{width:60px;height:60px;border-radius:50%;border:2px solid transparent;border-top-color:#22d3ee;border-right-color:#b14dff;animation:spSpin .9s linear infinite}
@@ -155,7 +143,7 @@ body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overfl
   </div>
 </div>
 
-<!-- API SCREEN (admin function 1) -->
+<!-- API TOKEN SCREEN -->
 <div class="screen" id="s-api">
   <div class="card-ui">
     <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
@@ -167,7 +155,7 @@ body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overfl
       </svg>
     </div>
     <div class="title">API TOKEN</div>
-    <div class="desc">UPDATE AUTHORIZATION TOKEN</div>
+    <div class="desc">UPDATE SEARCH AUTHORIZATION TOKEN</div>
     <div class="input-wrap">
       <input type="text" class="inp" id="apiToken" placeholder="Bearer token" autocomplete="off" spellcheck="false"/>
     </div>
@@ -177,7 +165,7 @@ body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overfl
   </div>
 </div>
 
-<!-- TOKEN SCREEN (admin function 2) -->
+<!-- TOKEN SCREEN -->
 <div class="screen" id="s-token">
   <div class="card-ui">
     <div class="brand-logo">ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ</div>
@@ -189,7 +177,7 @@ body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overfl
       </svg>
     </div>
     <div class="title">CURRENT TOKEN</div>
-    <div class="desc">VIEW OR UPDATE TOKEN</div>
+    <div class="desc">VIEW OR UPDATE SEARCH TOKEN</div>
     <div class="input-wrap">
       <input type="text" class="inp" id="tokInput" placeholder="token value" autocomplete="off" spellcheck="false"/>
     </div>
@@ -220,31 +208,7 @@ body{background:#06060c;color:var(--text);font-family:'Outfit',sans-serif;overfl
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════════
-   ɴᴀɪʀᴏɴ x ᴍᴀᴠɪᴀ — SINGLE HTML APP
-   ══════════════════════════════════════════════════════ */
-
-const SEARCH_URL = '/proxy-search';          // ← Deno proxy (same origin)
-const VERIFY_URL = '/';                      // ← Deno verify (same origin)
-const DEFAULT_TOKEN = 'hsmdz_2026_secure_9xAk!kL';
-const LS_KEY = 'nairon_mavia_cfg';
-
 const $ = id => document.getElementById(id);
-
-/* ---------- CONFIG (localStorage) ---------- */
-function getCfg(){
-  try{
-    const raw = localStorage.getItem(LS_KEY);
-    if(raw){
-      const c = JSON.parse(raw);
-      return { token: c.token || DEFAULT_TOKEN };
-    }
-  }catch(e){}
-  return { token: DEFAULT_TOKEN };
-}
-function saveCfg(c){
-  try{ localStorage.setItem(LS_KEY, JSON.stringify(c)); }catch(e){}
-}
 
 /* ---------- SCREEN NAV ---------- */
 function show(id){
@@ -253,50 +217,33 @@ function show(id){
   if(el) el.classList.add('on');
 }
 
-/* ---------- VERIFY (same-origin Deno) ---------- */
-async function denoVerify(key){
+/* ---------- VERIFY ---------- */
+async function verifyKey(key){
   try{
-    const url = VERIFY_URL + '?key=' + encodeURIComponent(key);
-    const r = await fetch(url, { method:'GET', cache:'no-store' });
+    const r = await fetch('/?key=' + encodeURIComponent(key), { cache:'no-store' });
     if(!r.ok) return null;
     return await r.json();
-  }catch(e){
-    console.warn('verify failed', e);
-    return null;
-  }
+  }catch(e){ return null; }
+}
+
+async function getMaintenance(){
+  try{
+    const r = await fetch('/maintenance-status', { cache:'no-store' });
+    if(!r.ok) return false;
+    const d = await r.json();
+    return !!d.active;
+  }catch(e){ return false; }
 }
 
 /* ---------- BOOT CHECK ---------- */
 async function bootCheck(){
   $('mtRetry').style.display = 'none';
-  $('mtBar').style.width = '30%';
+  $('mtBar').style.width = '40%';
   $('mtMsg').className = 'msg info';
-  $('mtMsg').textContent = 'VERIFYING SYSTEM...';
+  $('mtMsg').textContent = 'CHECKING SYSTEM...';
   show('s-maint');
 
-  // 1. maintenance
-  $('mtBar').style.width = '55%';
-  const mRes = await denoVerify('maintenance');
-  const maintOn = !!(mRes && mRes.status === 'verified' && String(mRes.name).toLowerCase() === 'active');
-
-  // 2. api key → token
-  $('mtBar').style.width = '75%';
-  const aRes = await denoVerify('api');
-  if(aRes && aRes.status === 'verified' && aRes.name){
-    const cfg = getCfg();
-    cfg.token = aRes.name;
-    saveCfg(cfg);
-  }
-
-  // 3. token key → token
-  $('mtBar').style.width = '90%';
-  const tRes = await denoVerify('token');
-  if(tRes && tRes.status === 'verified' && tRes.name){
-    const cfg = getCfg();
-    cfg.token = tRes.name;
-    saveCfg(cfg);
-  }
-
+  const maintOn = await getMaintenance();
   $('mtBar').style.width = '100%';
 
   if(maintOn){
@@ -333,7 +280,7 @@ async function login(){
   msg.className = 'msg info';
   msg.textContent = 'Contacting server...';
 
-  const data = await denoVerify(key);
+  const data = await verifyKey(key);
 
   if(!data || data.status !== 'verified'){
     inp.classList.add('err');
@@ -351,19 +298,20 @@ async function login(){
 
   const nameLower = String(data.name || '').toLowerCase();
 
-  setTimeout(()=>{
+  setTimeout(async ()=>{
     inp.value = '';
 
     if(nameLower === 'api'){
-      $('apiToken').value = data.name || '';
-      $('apiMsg').textContent = 'Loaded from key';
+      // Load current token
+      const m = await getMaintenance();
+      $('apiToken').value = '';
+      $('apiMsg').textContent = 'Enter new search token';
       $('apiMsg').className = 'msg info';
       show('s-api');
     }
     else if(nameLower === 'token'){
-      const cfg = getCfg();
-      $('tokInput').value = cfg.token || '';
-      $('tokMsg').textContent = '';
+      $('tokInput').value = '';
+      $('tokMsg').textContent = 'Enter new token value';
       $('tokMsg').className = 'msg info';
       show('s-token');
     }
@@ -382,21 +330,60 @@ $('loginBtn').addEventListener('click', login);
 $('loginKey').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
 
 /* ---------- API SCREEN ---------- */
-$('apiSave').addEventListener('click', ()=>{
+$('apiSave').addEventListener('click', async ()=>{
   const val = $('apiToken').value.trim();
   const msg = $('apiMsg');
   if(!val){ msg.className='msg err'; msg.textContent='✕ token empty'; return; }
-  const cfg = getCfg(); cfg.token = val; saveCfg(cfg);
-  msg.className='msg ok'; msg.textContent='✓ Token saved locally';
+  msg.className = 'msg info';
+  msg.textContent = 'Saving...';
+  try{
+    const r = await fetch('/admin/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Token': val,   // ← yahan admin token hi daalna hoga
+      },
+      body: JSON.stringify({ token: val })
+    });
+    const d = await r.json();
+    if(d.success){
+      msg.className='msg ok';
+      msg.textContent='✓ Token updated globally';
+    } else {
+      msg.className='msg err';
+      msg.textContent='✕ ' + (d.error || 'failed');
+    }
+  }catch(e){
+    msg.className='msg err';
+    msg.textContent='✕ Error';
+  }
 });
 
 /* ---------- TOKEN SCREEN ---------- */
-$('tokSave').addEventListener('click', ()=>{
+$('tokSave').addEventListener('click', async ()=>{
   const val = $('tokInput').value.trim();
   const msg = $('tokMsg');
   if(!val){ msg.className='msg err'; msg.textContent='✕ token empty'; return; }
-  const cfg = getCfg(); cfg.token = val; saveCfg(cfg);
-  msg.className='msg ok'; msg.textContent='✓ Token updated';
+  msg.className='msg info';
+  msg.textContent='Saving...';
+  try{
+    const r = await fetch('/admin/token', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'X-Admin-Token': val },
+      body: JSON.stringify({ token: val })
+    });
+    const d = await r.json();
+    if(d.success){
+      msg.className='msg ok';
+      msg.textContent='✓ Token updated globally';
+    } else {
+      msg.className='msg err';
+      msg.textContent='✕ ' + (d.error || 'failed');
+    }
+  }catch(e){
+    msg.className='msg err';
+    msg.textContent='✕ Error';
+  }
 });
 
 /* ---------- LOGOUT ---------- */
@@ -426,11 +413,9 @@ async function doSearch(){
   $('getBtn').disabled = true;
   area.innerHTML = '';
 
-  const cfg = getCfg();
   try{
-    const res = await fetch(SEARCH_URL + '?query=' + encodeURIComponent(num), {
+    const res = await fetch('/proxy-search?query=' + encodeURIComponent(num), {
       method:'GET',
-      headers:{ 'X-Auth-Token': cfg.token },     // ← Deno padhega
       cache:'no-store'
     });
     const data = await res.json().catch(()=>null);
@@ -445,7 +430,6 @@ async function doSearch(){
     }
     showResult(area, data.data[0]);
   }catch(e){
-    console.error(e);
     await new Promise(r=>setTimeout(r, 300));
     $('loader').classList.remove('on');
     $('getBtn').disabled = false;
@@ -480,7 +464,6 @@ function esc(s){
   }[c]));
 }
 
-/* ---------- START ---------- */
 window.addEventListener('load', ()=>{
   setTimeout(bootCheck, 1500);
 });
