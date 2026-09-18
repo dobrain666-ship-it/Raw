@@ -308,4 +308,182 @@ async function bootCheck(){
 
   $('mtMsg').className = 'msg ok';
   $('mtMsg').textContent = '✓ SYSTEM READY';
-  setTimeout(()
+  setTimeout(()=>show('s-login'), 500);
+}
+
+/* ---------- LOGIN ---------- */
+async function login(){
+  const inp = $('loginKey');
+  const btn = $('loginBtn');
+  const msg = $('loginMsg');
+  const key = inp.value.trim();
+
+  if(!key){
+    inp.classList.add('err');
+    msg.className = 'msg err';
+    msg.textContent = '✕ Please enter a key';
+    setTimeout(()=>inp.classList.remove('err'), 500);
+    return;
+  }
+
+  inp.classList.remove('err','ok');
+  btn.disabled = true;
+  const oldHTML = btn.innerHTML;
+  btn.innerHTML = 'VERIFYING...';
+  msg.className = 'msg info';
+  msg.textContent = 'Contacting server...';
+
+  const data = await denoVerify(key);
+
+  if(!data || data.status !== 'verified'){
+    inp.classList.add('err');
+    msg.className = 'msg err';
+    msg.textContent = '✕ Invalid Key · Access Denied';
+    setTimeout(()=>inp.classList.remove('err'), 600);
+    btn.disabled = false;
+    btn.innerHTML = oldHTML;
+    return;
+  }
+
+  inp.classList.add('ok');
+  msg.className = 'msg ok';
+  msg.textContent = '✓ Access Granted · ' + (data.name || key);
+
+  const nameLower = String(data.name || '').toLowerCase();
+
+  setTimeout(()=>{
+    inp.value = '';
+
+    if(nameLower === 'api'){
+      $('apiToken').value = data.name || '';
+      $('apiMsg').textContent = 'Loaded from key';
+      $('apiMsg').className = 'msg info';
+      show('s-api');
+    }
+    else if(nameLower === 'token'){
+      const cfg = getCfg();
+      $('tokInput').value = cfg.token || '';
+      $('tokMsg').textContent = '';
+      $('tokMsg').className = 'msg info';
+      show('s-token');
+    }
+    else {
+      $('numInput').value = '';
+      $('resultArea').innerHTML = '';
+      show('s-search');
+      setTimeout(()=>$('numInput').focus(), 400);
+    }
+    btn.disabled = false;
+    btn.innerHTML = oldHTML;
+  }, 500);
+}
+
+$('loginBtn').addEventListener('click', login);
+$('loginKey').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
+
+/* ---------- API SCREEN ---------- */
+$('apiSave').addEventListener('click', ()=>{
+  const val = $('apiToken').value.trim();
+  const msg = $('apiMsg');
+  if(!val){ msg.className='msg err'; msg.textContent='✕ token empty'; return; }
+  const cfg = getCfg(); cfg.token = val; saveCfg(cfg);
+  msg.className='msg ok'; msg.textContent='✓ Token saved locally';
+});
+
+/* ---------- TOKEN SCREEN ---------- */
+$('tokSave').addEventListener('click', ()=>{
+  const val = $('tokInput').value.trim();
+  const msg = $('tokMsg');
+  if(!val){ msg.className='msg err'; msg.textContent='✕ token empty'; return; }
+  const cfg = getCfg(); cfg.token = val; saveCfg(cfg);
+  msg.className='msg ok'; msg.textContent='✓ Token updated';
+});
+
+/* ---------- LOGOUT ---------- */
+function logout(){
+  $('loginKey').value = '';
+  $('loginMsg').className = 'msg info';
+  $('loginMsg').textContent = 'Waiting for key...';
+  show('s-login');
+}
+
+/* ---------- SEARCH ---------- */
+$('numInput').addEventListener('input', e=>{
+  e.target.value = e.target.value.replace(/\D/g,'').slice(0,11);
+});
+$('numInput').addEventListener('keydown', e=>{ if(e.key === 'Enter') doSearch(); });
+$('getBtn').addEventListener('click', doSearch);
+
+async function doSearch(){
+  const num = $('numInput').value.trim();
+  const area = $('resultArea');
+  if(num.length < 10){
+    $('numInput').classList.add('err');
+    setTimeout(()=>$('numInput').classList.remove('err'), 500);
+    return;
+  }
+  $('loader').classList.add('on');
+  $('getBtn').disabled = true;
+  area.innerHTML = '';
+
+  const cfg = getCfg();
+  try{
+    const res = await fetch(SEARCH_URL + '?query=' + encodeURIComponent(num), {
+      method:'GET',
+      headers:{ 'X-Auth-Token': cfg.token },     // ← Deno padhega
+      cache:'no-store'
+    });
+    const data = await res.json().catch(()=>null);
+
+    await new Promise(r=>setTimeout(r, 400));
+    $('loader').classList.remove('on');
+    $('getBtn').disabled = false;
+
+    if(!data || data.success === false || !data.data || !data.data[0]){
+      showError(area, 'DATA NOT FOUND');
+      return;
+    }
+    showResult(area, data.data[0]);
+  }catch(e){
+    console.error(e);
+    await new Promise(r=>setTimeout(r, 300));
+    $('loader').classList.remove('on');
+    $('getBtn').disabled = false;
+    showError(area, 'DATA NOT FOUND');
+  }
+}
+
+function showResult(area, item){
+  const rows = [
+    { label:'Name',    value: item.name    || 'N/A' },
+    { label:'Mobile',  value: item.mobile  || 'N/A' },
+    { label:'CNIC',    value: item.cnic    || 'N/A' },
+    { label:'Address', value: item.address || 'N/A' },
+    { label:'Num2Name',value: (item.Num2Name===null||item.Num2Name===undefined||item.Num2Name==='') ? 'N/A' : item.Num2Name }
+  ];
+  let h = '<div class="result-card">';
+  rows.forEach((r,i)=>{
+    h += `<div class="row"><div class="label">${r.label}</div><div class="value">${esc(String(r.value))}</div></div>`;
+    if(i < rows.length-1) h += '<div class="divider"></div>';
+  });
+  h += '</div>';
+  area.innerHTML = h;
+}
+
+function showError(area, msg){
+  area.innerHTML = `<div class="error-card"><div class="err-title">${msg}</div><div class="err-sub">NO RECORD AVAILABLE</div></div>`;
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+/* ---------- START ---------- */
+window.addEventListener('load', ()=>{
+  setTimeout(bootCheck, 1500);
+});
+</script>
+</body>
+</html>
